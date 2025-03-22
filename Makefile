@@ -12,7 +12,7 @@ O = 2
 OFLAGS = -O$(O) -fomit-frame-pointer -ftree-vectorize -fno-strict-aliasing -flto=auto
 WFLAGS = -Wall -Wextra -Wno-multichar -Wno-unused-parameter
 INC = /opt/local/include /opt/local/include/SDL /usr/local/include /usr/include
-LIBDIR = /usr/lib64
+LIBDIR = /usr/lib/x86_64-linux-gnu
 LIB = libSDLmain.a libSDL_net.so libSDL_mixer.so libSDL_ttf.so libSDL_image.so libSDL.so libGLEW.so libGLU.so libGL.so
 DEF = NO_VR
 EXE = bttt
@@ -232,19 +232,19 @@ default: $(TARGET)
 %.elf: exe
 	rsync -ax "$(EXE)" "$@"
 	-chmod +x "$@"
-	-patchelf --add-rpath '$$ORIGIN/Bin64' "$@"
-	-patchelf --replace-needed libSDL2-2.0.so.0 Bin64/libSDL2.so "$@"
-	-patchelf --replace-needed libSDL2_image-2.0.so.0 Bin64/libSDL2_image.so "$@"
-	-patchelf --replace-needed libSDL2_mixer-2.0.so.0 Bin64/libSDL2_mixer.so "$@"
-	-patchelf --replace-needed libSDL2_net-2.0.so.0 Bin64/libSDL2_net.so "$@"
-	-patchelf --replace-needed libSDL2_ttf-2.0.so.0 Bin64/libSDL2_ttf.so "$@"
-	-patchelf --replace-needed libGL.so.1 Bin64/libGL.so "$@"
-	-patchelf --replace-needed libGLU.so.1 Bin64/libGLU.so "$@"
-	-patchelf --replace-needed libGLEW.so.2.2 Bin64/libGLEW.so "$@"
-	-patchelf --replace-needed libstdc++.so.6 Bin64/libstdc++.so "$@"
-	-patchelf --replace-needed libgcc_s.so.1 Bin64/libgcc_s.so "$@"
-	-patchelf --replace-needed libm.so.6 Bin64/libm.so "$@"
-	-patchelf --replace-needed libc.so.6 Bin64/libc.so "$@"
+	-patchelf --set-rpath '$$ORIGIN/Bin64' "$@"
+	-patchelf --replace-needed libSDL2-2.0.so.0 libSDL2.so "$@"
+	-patchelf --replace-needed libSDL2_image-2.0.so.0 libSDL2_image.so "$@"
+	-patchelf --replace-needed libSDL2_mixer-2.0.so.0 libSDL2_mixer.so "$@"
+	-patchelf --replace-needed libSDL2_net-2.0.so.0 libSDL2_net.so "$@"
+	-patchelf --replace-needed libSDL2_ttf-2.0.so.0 libSDL2_ttf.so "$@"
+	-patchelf --replace-needed libGL.so.1 libGL.so.1 "$@"
+	-patchelf --replace-needed libGLU.so.1 libGLU.so "$@"
+	-patchelf --replace-needed libGLEW.so.2.1 libGLEW.so "$@"
+	-patchelf --replace-needed libstdc++.so.6 libstdc++.so "$@"
+	-patchelf --replace-needed libgcc_s.so.1 libgcc_s.so "$@"
+	-patchelf --replace-needed libm.so.6 libm.so.6 "$@"
+	-patchelf --replace-needed libc.so.6 libc.so.6 "$@"
 
 exe: $(SOURCES) $(GAME_HEADERS) $(ENGINE_HEADERS) $(EXE)
 
