@@ -976,7 +976,7 @@ bool HexBoard::KeyDown( SDLKey key )
 				(*layer)->Rect.y = min_y;
 		}
 	}
-	else if( (key == SDLK_i) || (key == SDLK_F9) )
+	else if( (key == SDLK_i && !shift) || (key == SDLK_F9) )
 	{
 		RecordSheet *rs = game->GetRecordSheet( selected );
 		if( rs )
@@ -984,7 +984,7 @@ bool HexBoard::KeyDown( SDLKey key )
 		else
 			game->ShowRecordSheet( selected );
 	}
-	else if( (key == SDLK_o) && target )
+	else if( ( (key == SDLK_o) || (key == SDLK_i && shift) ) && target )
 	{
 		RecordSheet *rs = game->GetRecordSheet( target );
 		if( rs )
