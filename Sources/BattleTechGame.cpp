@@ -73,6 +73,8 @@ void BattleTechGame::SetDefaults( void )
 	Cfg.Settings[ "show_ecm" ] = "true";
 	Cfg.Settings[ "record_sheet_popup" ] = "true";
 	Cfg.Settings[ "map_drag" ] = "false";
+	Cfg.Settings[ "top_turn_msg" ] = "false";
+	Cfg.Settings[ "flip_mech_health" ] = "false";
 }
 
 

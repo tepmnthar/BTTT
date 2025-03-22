@@ -346,8 +346,15 @@ void HexBoard::Draw( void )
 	
 	if( moused )
 	{
-		if( (moused->HitClock.ElapsedSeconds() > show_hit_time) && ! game->GetRecordSheet(moused) )
-			moused->DrawHealth( game->Mouse.X - 64, game->Mouse.Y + 35, game->Mouse.X + 64, game->Mouse.Y + 163 );
+		bool flipped = game->Cfg.SettingAsBool("flip_mech_health") && game->Mouse.Y > game->Gfx.H/2;
+		if( (moused->HitClock.ElapsedSeconds() > show_hit_time) && ! game->GetRecordSheet(moused) ) {
+			if ( flipped ) 
+			{
+				moused->DrawHealth( game->Mouse.X - 64, game->Mouse.Y - 175, game->Mouse.X + 64, game->Mouse.Y - 47 ); // -(6 + 20 + 20 + 1 + 128) 
+			} else {
+				moused->DrawHealth( game->Mouse.X - 64, game->Mouse.Y + 35, game->Mouse.X + 64, game->Mouse.Y + 163 );
+			}
+		}
 		
 		std::string name = moused->ShortFullName();
 		if( game->State == BattleTech::State::SETUP )
@@ -369,8 +376,14 @@ void HexBoard::Draw( void )
 			if( moused->Narced() )
 				name += " [NARC]";
 		}
-		TurnFont->DrawText( name, game->Mouse.X + 1, game->Mouse.Y + 15, Font::ALIGN_TOP_CENTER, 0,0,0,0.8f );
-		TurnFont->DrawText( name, game->Mouse.X    , game->Mouse.Y + 14, Font::ALIGN_TOP_CENTER );
+		if ( flipped )
+		{
+			TurnFont->DrawText( name, game->Mouse.X + 1, game->Mouse.Y - 45, Font::ALIGN_TOP_CENTER, 0,0,0,0.8f );
+			TurnFont->DrawText( name, game->Mouse.X    , game->Mouse.Y - 46, Font::ALIGN_TOP_CENTER );	
+		} else {
+			TurnFont->DrawText( name, game->Mouse.X + 1, game->Mouse.Y + 15, Font::ALIGN_TOP_CENTER, 0,0,0,0.8f );
+			TurnFont->DrawText( name, game->Mouse.X    , game->Mouse.Y + 14, Font::ALIGN_TOP_CENTER );	
+		}
 	}
 	
 	if( hex && (hex->Height || hex->Forest) )
@@ -595,8 +608,14 @@ void HexBoard::Draw( void )
 				status = "Press Tab to select a team and BattleMech.";
 		}
 	}
-	TurnFont->DrawText( status, Rect.w/2 + 2, Rect.h,     Font::ALIGN_BOTTOM_CENTER, 0,0,0,0.8f );
-	TurnFont->DrawText( status, Rect.w/2,     Rect.h - 2, Font::ALIGN_BOTTOM_CENTER, r,g,b,1.0f );
+	if ( game->Cfg.SettingAsBool("top_turn_msg") ) 
+	{
+		TurnFont->DrawText( status, Rect.w/2 + 2, Rect.y + 4, Font::ALIGN_TOP_CENTER, 0,0,0,0.8f );
+		TurnFont->DrawText( status, Rect.w/2,     Rect.y + 2, Font::ALIGN_TOP_CENTER, r,g,b,1.0f );	
+	} else {
+		TurnFont->DrawText( status, Rect.w/2 + 2, Rect.h,     Font::ALIGN_BOTTOM_CENTER, 0,0,0,0.8f );
+		TurnFont->DrawText( status, Rect.w/2,     Rect.h - 2, Font::ALIGN_BOTTOM_CENTER, r,g,b,1.0f );
+	}
 }
 
 
